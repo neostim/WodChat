@@ -1,4 +1,4 @@
-const WS_PORT = 443; //make sure this matches the port for the webscokets server
+const WS_PORT = process.env.PORT; //make sure this matches the port for the webscokets server
 
 var localUuid;
 var localDisplayName;
