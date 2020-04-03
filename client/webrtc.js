@@ -45,9 +45,8 @@ function start() {
 		
 		  
 		  
-        serverConnection = new WebSocket('wss://' + window.location.hostname + ':' + WS_PORT);
-		 // serverConnection = new WebSocket('wss://192.168.0.8:' + WS_PORT);
-		  alert('ws://192.168.0.8:' + WS_PORT);
+       // serverConnection = new WebSocket('wss://' + window.location.hostname + ':' + WS_PORT);
+		  serverConnection = new WebSocket('wss://wodchat.herokuapp.com/:' + WS_PORT);
 		    serverConnection.onopen = function () {
   serverConnection.send('Ping'); // Send the message 'Ping' to the server
 };
