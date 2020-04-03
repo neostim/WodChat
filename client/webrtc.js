@@ -115,8 +115,8 @@ function gotMessageFromServer(message) {
 }
 
 function setUpPeer(peerUuid, displayName, initCall = false) {
-	console.log('peerConnectionConfig: ', peerConnectionConfig);
-	
+	console.log('peerConnectionConfig: ', peerUuid);
+	console.log('peerConnectionConfig: ', peerConnections[peerUuid]);
   peerConnections[peerUuid] = { 'displayName': displayName, 'pc': new RTCPeerConnection(peerConnectionConfig) };
   peerConnections[peerUuid].pc.onicecandidate = event => gotIceCandidate(event, peerUuid);
   peerConnections[peerUuid].pc.ontrack = event => gotRemoteStream(event, peerUuid);
