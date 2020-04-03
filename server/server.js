@@ -44,6 +44,7 @@ httpServer.listen(HTTP_PORT);
 const wss = new WebSocketServer({ server: httpServer });
 
 wss.on('connection', function (ws) {
+ console.log('Client connected');
   ws.on('message', function (message) {
     // Broadcast any received message to all clients
     console.log('received: %s', message);
