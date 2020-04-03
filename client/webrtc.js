@@ -46,6 +46,7 @@ function start() {
 		  //serverConnection = new WebSocket('wss://wodchat.herokuapp.com:' + WS_PORT);
 	    serverConnection = new WebSocket(HOST);
 	    alert(serverConnect);
+	    alert('Heeeey');
         serverConnection.onmessage = gotMessageFromServer;
         serverConnection.onopen = event => {
           serverConnection.send(JSON.stringify({ 'displayName': localDisplayName, 'uuid': localUuid, 'dest': 'all' }));
