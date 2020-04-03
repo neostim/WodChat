@@ -46,7 +46,6 @@ function start() {
        // serverConnection = new WebSocket('wss://' + window.location.hostname + ':' + WS_PORT);
 		  serverConnection = new WebSocket('wss://wodchat.herokuapp.com');
 	  //  serverConnection = new WebSocket(HOST);
-	    prompt(serverConnect, '');
         serverConnection.onmessage = gotMessageFromServer;
         serverConnection.onopen = event => {
           serverConnection.send(JSON.stringify({ 'displayName': localDisplayName, 'uuid': localUuid, 'dest': 'all' }));
@@ -73,6 +72,7 @@ function start() {
 
 
 function gotMessageFromServer(message) {
+	console.log('gotmessagefromserverCalled');
   var signal = JSON.parse(message.data);
   var peerUuid = signal.uuid;
 
