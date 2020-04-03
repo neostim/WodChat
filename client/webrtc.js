@@ -6,6 +6,8 @@ var localStream;
 var serverConnection;
 var peerConnections = {}; // key is uuid, values are peer connection object and user defined display name string
 var HOST = location.origin.replace(/^http/, 'ws')
+alert(HOST);
+alert(location.origin);
 
 var peerConnectionConfig = {
   'iceServers': [
