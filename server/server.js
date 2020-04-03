@@ -1,19 +1,19 @@
-const HTTPS_PORT = process.env.PORT; //default port for https is 443
-const HTTP_PORT = 8001; //default port for http is 80
+//const HTTPS_PORT = process.env.PORT; //default port for https is 443
+const HTTP_PORT = process.env.PORT; //default port for http is 80
 
 
 
 const fs = require('fs');
 const http = require('http');
-const https = require('https');
+//const https = require('https');
 const WebSocket = require('ws');
 // based on examples at https://www.npmjs.com/package/ws 
 const WebSocketServer = WebSocket.Server;
 
 // Yes, TLS is required
 const serverConfig = {
-  key: fs.readFileSync('79244034_192.168.0.8.key'),
-  cert: fs.readFileSync('79244034_192.168.0.8.cert'),
+//  key: fs.readFileSync('79244034_192.168.0.8.key'),
+ // cert: fs.readFileSync('79244034_192.168.0.8.cert'),
 };
 
 // ----------------------------------------------------------------------------------------
@@ -35,13 +35,13 @@ const handleRequest = function (request, response) {
   }
 };
 
-const httpsServer = https.createServer(serverConfig, handleRequest);
-httpsServer.listen(HTTPS_PORT);
+const httpServer = http.createServer(serverConfig, handleRequest);
+httpServer.listen(HTTP_PORT);
 
 // ----------------------------------------------------------------------------------------
 
 // Create a server for handling websocket calls
-const wss = new WebSocketServer({ server: httpsServer });
+const wss = new WebSocketServer({ server: httpServer });
 
 wss.on('connection', function (ws) {
   ws.on('message', function (message) {
@@ -68,8 +68,8 @@ console.log('Server running.'
 
 // Separate server to redirect from http to https
 
-http.createServer(function (req, res) {
-    console.log(req.headers['host']+req.url);
-    res.writeHead(301, { "Location": "https://" + req.headers['host'] + req.url });
-    res.end();
-}).listen(HTTP_PORT);
+//http.createServer(function (req, res) {
+ //   console.log(req.headers['host']+req.url);
+  //  res.writeHead(301, { "Location": "https://" + req.headers['host'] + req.url });
+   // res.end();
+//}).listen(HTTP_PORT);
