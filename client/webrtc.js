@@ -41,48 +41,35 @@ function start() {
       }).catch(errorHandler)
 
       // set up websocket and message all existing clients
-      .then(() => {
-		  
-		
-		  
-		  
+      .then(() => { 
        // serverConnection = new WebSocket('wss://' + window.location.hostname + ':' + WS_PORT);
 		  //serverConnection = new WebSocket('wss://wodchat.herokuapp.com:' + WS_PORT);
 	    serverConnection = new WebSocket(HOST);
-		    serverConnection.onopen = function () {
-  serverConnection.send('Ping'); // Send the message 'Ping' to the server
-};
-
-
-	
-// Log errors
-serverConnection.onerror = function (error) {
-  alert('WebSocket Error ' + error);
-};
-
-// Log messages from the server
-serverConnection.onmessage = function (e) {
-  alert('Server: ' + e.data);
-};
-		  
-		  
+	    alert(serverConnect);
         serverConnection.onmessage = gotMessageFromServer;
-		
-		 // alert('this is the value' + serverConnection.onmessage);
-		  	////prompt('displayName' + localDisplayName + 'uuid' + localUuid + 'dest all', '');
         serverConnection.onopen = event => {
           serverConnection.send(JSON.stringify({ 'displayName': localDisplayName, 'uuid': localUuid, 'dest': 'all' }));
-			
         }
-		
-		
       }).catch(errorHandler);
-	  
 
   } else {
     alert('Your browser does not support getUserMedia API');
   }
 }
+
+
+	
+// Log errors
+//serverConnection.onerror = function (error) {
+ // alert('WebSocket Error ' + error);
+//};
+
+// Log messages from the server
+//serverConnection.onmessage = function (e) {
+//  alert('Server: ' + e.data);
+//};
+		 	  
+
 
 function gotMessageFromServer(message) {
   var signal = JSON.parse(message.data);
