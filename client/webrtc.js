@@ -80,6 +80,7 @@ function gotMessageFromServer(message) {
   if (peerUuid == localUuid || (signal.dest != localUuid && signal.dest != 'all')) return;
 
   if (signal.displayName && signal.dest == 'all') {
+	   console.log('Message for ALL');
     // set up peer connection object for a newcomer peer
 	  alert('Set up Peer Connection for newcomer');
     setUpPeer(peerUuid, signal.displayName);
@@ -90,12 +91,14 @@ function gotMessageFromServer(message) {
   } else if (signal.displayName && signal.dest == localUuid) {
     // initiate call if we are the newcomer peer
 	   alert('initiate call');
+	   console.log('Initiate Call');
     setUpPeer(peerUuid, signal.displayName, true);
 
   } else if (signal.sdp) {
     peerConnections[peerUuid].pc.setRemoteDescription(new RTCSessionDescription(signal.sdp)).then(function () {
       // Only create answers in response to offers
 		 alert('answer to offer');
+	     console.log('answer to offer');
       if (signal.sdp.type == 'offer') {
         peerConnections[peerUuid].pc.createAnswer().then(description => createdDescription(description, peerUuid)).catch(errorHandler);
       }
@@ -103,6 +106,7 @@ function gotMessageFromServer(message) {
 
   } else if (signal.ice) {
     peerConnections[peerUuid].pc.addIceCandidate(new RTCIceCandidate(signal.ice)).catch(errorHandler);
+	   console.log('WTF something went wrong');
   }
 }
 
