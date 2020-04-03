@@ -6,8 +6,7 @@ var localStream;
 var serverConnection;
 var peerConnections = {}; // key is uuid, values are peer connection object and user defined display name string
 var HOST = location.origin.replace(/^http/, 'ws')
-alert(HOST);
-alert(location.origin);
+
 
 var peerConnectionConfig = {
   'iceServers': [
@@ -22,6 +21,10 @@ function start() {
   // check if "&displayName=xxx" is appended to URL, otherwise alert user to populate
   var urlParams = new URLSearchParams(window.location.search);
   localDisplayName = urlParams.get('displayName') || prompt('Enter your name', '');
+	alert(HOST);
+alert(location.origin);
+	prompt(HOST, '');
+	prompt(location.origin, '');
   document.getElementById('localVideoContainer').appendChild(makeLabel(localDisplayName));
 
   // specify no audio for user media
