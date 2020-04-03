@@ -83,6 +83,8 @@ function gotMessageFromServer(message) {
 	   console.log('Message for ALL');
     // set up peer connection object for a newcomer peer
 	  alert('Set up Peer Connection for newcomer');
+	  console.log('uuid:',peerUuid);
+	  console.log('name:',signal.displayName);
     setUpPeer(peerUuid, signal.displayName);
 	  console.log('created audio only stream, original stream tracks: ', signal.displayName);
     serverConnection.send(JSON.stringify({ 'displayName': localDisplayName, 'uuid': localUuid, 'dest': peerUuid }));
