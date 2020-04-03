@@ -5,6 +5,7 @@ var localDisplayName;
 var localStream;
 var serverConnection;
 var peerConnections = {}; // key is uuid, values are peer connection object and user defined display name string
+var HOST = location.origin.replace(/^http/, 'ws')
 
 var peerConnectionConfig = {
   'iceServers': [
@@ -46,7 +47,8 @@ function start() {
 		  
 		  
        // serverConnection = new WebSocket('wss://' + window.location.hostname + ':' + WS_PORT);
-		  serverConnection = new WebSocket('wss://wodchat.herokuapp.com:' + WS_PORT);
+		  //serverConnection = new WebSocket('wss://wodchat.herokuapp.com:' + WS_PORT);
+	    serverConnection = new WebSocket(HOST);
 		    serverConnection.onopen = function () {
   serverConnection.send('Ping'); // Send the message 'Ping' to the server
 };
