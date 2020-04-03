@@ -15,6 +15,8 @@ var peerConnectionConfig = {
   ]
 };
 
+console.log('Peer config: ', peerConnectionConfig);
+
 function start() {
   localUuid = createUUID();
 
