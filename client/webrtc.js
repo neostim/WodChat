@@ -21,10 +21,6 @@ function start() {
   // check if "&displayName=xxx" is appended to URL, otherwise alert user to populate
   var urlParams = new URLSearchParams(window.location.search);
   localDisplayName = urlParams.get('displayName') || prompt('Enter your name', '');
-	alert(HOST);
-alert(location.origin);
-	prompt(HOST, '');
-	prompt(location.origin, '');
   document.getElementById('localVideoContainer').appendChild(makeLabel(localDisplayName));
 
   // specify no audio for user media
@@ -48,7 +44,7 @@ alert(location.origin);
       // set up websocket and message all existing clients
       .then(() => { 
        // serverConnection = new WebSocket('wss://' + window.location.hostname + ':' + WS_PORT);
-		  serverConnection = new WebSocket('ws://wodchat.herokuapp.com');
+		  serverConnection = new WebSocket('wss://wodchat.herokuapp.com');
 	  //  serverConnection = new WebSocket(HOST);
 	    prompt(serverConnect, '');
         serverConnection.onmessage = gotMessageFromServer;
