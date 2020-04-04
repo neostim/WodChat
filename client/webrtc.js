@@ -51,7 +51,7 @@ function pageReady()
 		.then(() => {
 
 			// wss://wodchat.herokuapp.com
-			serverConnection = new WebSocket('wss://' + window.location.hostname + ':8443');
+			serverConnection = new WebSocket('wss://' + window.location.hostname);
 			serverConnection.onmessage = gotMessageFromServer;
 			serverConnection.onopen = event => {
 				serverConnection.send(

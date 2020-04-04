@@ -1,4 +1,4 @@
-const HTTPS_PORT = 443;
+const PORT = process.env.PORT || 3000;
 
 const fs = require('fs');
 const https = require('https');
@@ -30,8 +30,8 @@ const handleRequest = function (request, response) {
 };
 
 const httpsServer = https.createServer(serverConfig, handleRequest);
-	httpsServer.listen(HTTPS_PORT, '0.0.0.0');
-	// httpsServer.listen(HTTPS_PORT, () => console.log(`Listening on ${HTTPS_PORT}`));
+	// httpsServer.listen(PORT, '0.0.0.0');
+	httpsServer.listen(PORT, () => console.log(`Listening on ${PORT}`));
 
 
 // ----------------------------------------------------------------------------------------
@@ -67,4 +67,4 @@ wss.broadcast = function (data) {
  //   console.log(req.headers['host']+req.url);
   //  res.writeHead(301, { "Location": "https://" + req.headers['host'] + req.url });
    // res.end();
-//}).listen(HTTPS_PORT);
+//}).listen(PORT);
