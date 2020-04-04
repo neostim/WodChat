@@ -153,6 +153,8 @@ function gotMessageFromServer(message)
 
 function setUpPeer(peerUuid, displayName, initCall = false)
 {
+	console.log(`Peer Connection UUID: {$peerUuid}`);
+
 	peerConnections[peerUuid] = {
 		'displayName': displayName,
 		'pc': new RTCPeerConnection(peerConnectionConfig)
@@ -203,7 +205,7 @@ function createdDescription(description, peerUuid)
 
 function gotRemoteStream(event, peerUuid)
 {
-	console.log(`got remote stream, peer ${peerUuid}`);
+	console.log(`Got remote stream, peer ${peerUuid}`);
 
 	// assign stream to new HTML video element
 	var vidElement = document.createElement('video');
