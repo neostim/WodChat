@@ -8,8 +8,8 @@ const WebSocketServer = WebSocket.Server;
 
 // Yes, TLS is required
 const serverConfig = {
-  key:  fs.readFileSync('key.pem'),  // 79244034_192.168.0.8.key'
-  cert: fs.readFileSync('cert.pem'), // 79244034_192.168.0.8.cert
+//   key:  fs.readFileSync('key.pem'),  // 79244034_192.168.0.8.key'
+//   cert: fs.readFileSync('cert.pem'), // 79244034_192.168.0.8.cert
 };
 // ----------------------------------------------------------------------------------------
 

@@ -3,7 +3,7 @@ var localDisplayName;
 var localStream;
 var serverConnection;
 var peerConnections = {};
-var HOST = location.origin.replace(/^http/, 'ws');
+var HOST = location.origin.replace(/^http/, 'wss');
 // key is uuid, values are peer connection object and user defined display name string
 
 var peerConnectionConfig = {
@@ -13,7 +13,7 @@ var peerConnectionConfig = {
 	]
 };
 
-// console.log('Peer config: ', peerConnectionConfig);
+console.log('Peer config: ', peerConnectionConfig);
 
 function pageReady()
 {
@@ -51,7 +51,6 @@ function pageReady()
 		.catch(errorHandler)
 		.then(() => {
 
-			// wss://wodchat.herokuapp.com
 			serverConnection = new WebSocket(HOST); // 'wss://' + window.location.hostname
 			serverConnection.onmessage = gotMessageFromServer;
 			serverConnection.onopen = event => {
@@ -85,7 +84,7 @@ function pageReady()
 
 function gotMessageFromServer(message)
 {
-	// console.log('gotmessagefromserverCalled');
+	console.log('> gotMessageFromServer was called');
 	var signal   = JSON.parse(message.data),
 		peerUuid = signal.uuid;
 
@@ -94,13 +93,14 @@ function gotMessageFromServer(message)
 
 	if (signal.displayName && signal.dest == 'all') {
 
-		// console.log('Message for ALL');
+		console.log('Message for ALL');
 		// set up peer connection object for a newcomer peer
 
-		// alert('Set up Peer Connection for newcomer');
-		// console.log('uuid:',peerUuid);
-		// console.log('name:',signal.displayName);
-		// console.log('created audio only stream, original stream tracks: ', signal.displayName);
+		alert('Set up Peer Connection for newcomer');
+		console.log('uuid:',peerUuid);
+		console.log('name:',signal.displayName);
+		console.log('created audio only stream, original stream tracks: ', signal.displayName);
+
 		setUpPeer(peerUuid, signal.displayName);
 
 		serverConnection.send(
@@ -116,7 +116,8 @@ function gotMessageFromServer(message)
 
 		// initiate call if we are the newcomer peer
 		// alert('initiate call');
-		// console.log('Initiate Call');
+		console.log('Initiate Call');
+
 		setUpPeer(peerUuid, signal.displayName, true);
 
 	} else if (signal.sdp) {
@@ -125,21 +126,24 @@ function gotMessageFromServer(message)
 			.setRemoteDescription(new RTCSessionDescription(signal.sdp))
 			.then(function () {
 
-			// Only create answers in response to offers
-			// alert('answer to offer');
-			// console.log('answer to offer');
-			if (signal.sdp.type == 'offer') {
-				peerConnections[peerUuid].pc
-					.createAnswer()
-					.then(description => createdDescription(description, peerUuid))
-					.catch(errorHandler);
-			}
+				alert('answer to offer');
+				console.log('answer to offer');
 
-		}).catch(errorHandler);
+				// Only create answers in response to offers
+				if (signal.sdp.type == 'offer') {
+					peerConnections[peerUuid].pc
+						.createAnswer()
+						.then(description => createdDescription(description, peerUuid))
+						.catch(errorHandler);
+				}
+
+			})
+			.catch(errorHandler);
 
 	} else if (signal.ice) {
 
-		// console.log('WTF something went wrong');
+		console.log('WTF something went wrong');
+
 		peerConnections[peerUuid].pc
 			.addIceCandidate(new RTCIceCandidate(signal.ice))
 			.catch(errorHandler);
@@ -199,7 +203,8 @@ function createdDescription(description, peerUuid)
 
 function gotRemoteStream(event, peerUuid)
 {
-	// console.log(`got remote stream, peer ${peerUuid}`);
+	console.log(`got remote stream, peer ${peerUuid}`);
+
 	// assign stream to new HTML video element
 	var vidElement = document.createElement('video');
 		vidElement.setAttribute('autoplay', '');
@@ -224,7 +229,7 @@ function checkPeerDisconnect(event, peerUuid)
 {
 	var state = peerConnections[peerUuid].pc.iceConnectionState;
 
-	// console.log(`connection with peer ${peerUuid} ${state}`);
+	console.log(`connection with peer ${peerUuid} ${state}`);
 
 	if (state === "failed" || state === "closed" || state === "disconnected") {
 		delete peerConnections[peerUuid];
