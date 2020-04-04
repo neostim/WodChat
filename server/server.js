@@ -1,13 +1,15 @@
 const PORT = process.env.PORT || 3000;
 
 const fs = require('fs');
-const https = require('https');
-const WebSocketServer = require('ws').Server;
+const http = require('http');
+// const https = require('https');
+const WebSocket = require('ws');
+const WebSocketServer = WebSocket.Server;
 
 // Yes, TLS is required
 const serverConfig = {
-//   key:  fs.readFileSync('key.pem'),  // 79244034_192.168.0.8.key'
-//   cert: fs.readFileSync('cert.pem'), // 79244034_192.168.0.8.cert
+  key:  fs.readFileSync('key.pem'),  // 79244034_192.168.0.8.key'
+  cert: fs.readFileSync('cert.pem'), // 79244034_192.168.0.8.cert
 };
 // ----------------------------------------------------------------------------------------
 
@@ -16,20 +18,20 @@ const handleRequest = function (request, response) {
   // Render the single client html file for any request the HTTP server receives
 	console.log('request received: ' + request.url);
 
-	if (request.url === '/') {
-		response.writeHead(200, {
-			'Content-Type': 'text/html'
-		});
-		response.end(fs.readFileSync('client/index.html'));
-	} else if (request.url === '/webrtc.js') {
+	if (request.url === '/webrtc.js') {
 		response.writeHead(200, {
 			'Content-Type': 'application/javascript'
 		});
 		response.end(fs.readFileSync('client/webrtc.js'));
+	} else {
+		response.writeHead(200, {
+			'Content-Type': 'text/html'
+		});
+		response.end(fs.readFileSync('client/index.html'));
 	}
 };
 
-const httpsServer = https.createServer(serverConfig, handleRequest);
+const httpsServer = http.createServer(serverConfig, handleRequest);
 	// httpsServer.listen(PORT, '0.0.0.0');
 	httpsServer.listen(PORT, () => console.log(`Listening on ${PORT}`));
 
@@ -37,7 +39,9 @@ const httpsServer = https.createServer(serverConfig, handleRequest);
 // ----------------------------------------------------------------------------------------
 
 // Create a server for handling websocket calls
-const wss = new WebSocketServer({ server: httpsServer });
+const wss = new WebSocketServer({
+	server: httpsServer
+});
 
 wss.on('connection', function (ws) {
 	console.log('Client connected');
