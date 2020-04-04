@@ -38,7 +38,7 @@ const httpsServer = https.createServer(serverConfig, handleRequest);
 // ----------------------------------------------------------------------------------------
 
 // Create a server for handling websocket calls
-const wss = new WebSocketServer({ server: httpServer });
+const wss = new WebSocketServer({ server: httpsServer });
 
 wss.on('connection', function (ws) {
 	console.log('Client connected');
