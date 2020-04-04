@@ -1,42 +1,39 @@
-//const HTTPS_PORT = process.env.PORT; //default port for https is 443
-const HTTP_PORT = process.env.PORT; //default port for http is 80
-
-
+const HTTPS_PORT = 8443;
 
 const fs = require('fs');
-const http = require('http');
-//const https = require('https');
+const https = require('https');
 const WebSocket = require('ws');
-// based on examples at https://www.npmjs.com/package/ws 
 const WebSocketServer = WebSocket.Server;
 
 // Yes, TLS is required
 const serverConfig = {
-//  key: fs.readFileSync('79244034_192.168.0.8.key'),
- // cert: fs.readFileSync('79244034_192.168.0.8.cert'),
+//   key:  fs.readFileSync('key.pem'),  // 79244034_192.168.0.8.key'
+//   cert: fs.readFileSync('cert.pem'), // 79244034_192.168.0.8.cert
 };
-
 // ----------------------------------------------------------------------------------------
 
 // Create a server for the client html page
 const handleRequest = function (request, response) {
   // Render the single client html file for any request the HTTP server receives
-  console.log('request received: ' + request.url);
+	console.log('request received: ' + request.url);
 
- if (request.url === '/webrtc.js') {
-    response.writeHead(200, { 'Content-Type': 'application/javascript' });
-    response.end(fs.readFileSync('client/webrtc.js'));
-  } else if (request.url === '/style.css') {
-    response.writeHead(200, { 'Content-Type': 'text/css' });
-    response.end(fs.readFileSync('client/style.css'));
-  } else {
-    response.writeHead(200, { 'Content-Type': 'text/html' });
-    response.end(fs.readFileSync('client/index.html'));
-  }
+	if (request.url === '/') {
+		response.writeHead(200, {
+			'Content-Type': 'text/html'
+		});
+		response.end(fs.readFileSync('client/index.html'));
+	} else if (request.url === '/webrtc.js') {
+		response.writeHead(200, {
+			'Content-Type': 'application/javascript'
+		});
+		response.end(fs.readFileSync('client/webrtc.js'));
+	}
 };
 
-const httpServer = http.createServer(serverConfig, handleRequest);
-httpServer.listen(HTTP_PORT);
+const httpsServer = https.createServer(serverConfig, handleRequest);
+	httpsServer.listen(HTTPS_PORT, '0.0.0.0');
+//   .listen(HTTPS_PORT, () => console.log(`Listening on ${HTTPS_PORT}`));
+
 
 // ----------------------------------------------------------------------------------------
 
@@ -44,27 +41,24 @@ httpServer.listen(HTTP_PORT);
 const wss = new WebSocketServer({ server: httpServer });
 
 wss.on('connection', function (ws) {
- console.log('Client connected');
-  ws.on('message', function (message) {
-    // Broadcast any received message to all clients
-    console.log('received: %s', message);
-    wss.broadcast(message);
-  });
+	console.log('Client connected');
+	ws.on('message', function (message) {
+		// Broadcast any received message to all clients
+		console.log('received: %s', message);
+		wss.broadcast(message);
+	});
 
-  ws.on('error', () => ws.terminate());
+	ws.on('error', () => ws.terminate());
 });
 
 wss.broadcast = function (data) {
-  this.clients.forEach(function (client) {
-    if (client.readyState === WebSocket.OPEN) {
-      console.log('Sending client data', data);
-      client.send(data);
-    }
-  });
+	this.clients.forEach(function (client) {
+		if (client.readyState === WebSocket.OPEN) {
+			// console.log('Sending client data', data);
+			client.send(data);
+		}
+	});
 };
-
-console.log('Server running.'
-);
 
 // ----------------------------------------------------------------------------------------
 
@@ -74,4 +68,4 @@ console.log('Server running.'
  //   console.log(req.headers['host']+req.url);
   //  res.writeHead(301, { "Location": "https://" + req.headers['host'] + req.url });
    // res.end();
-//}).listen(HTTP_PORT);
+//}).listen(HTTPS_PORT);
