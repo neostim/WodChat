@@ -1,9 +1,8 @@
-const HTTPS_PORT = 8443;
+const HTTPS_PORT = 443;
 
 const fs = require('fs');
 const https = require('https');
-const WebSocket = require('ws');
-const WebSocketServer = WebSocket.Server;
+const WebSocketServer = require('ws').Server;
 
 // Yes, TLS is required
 const serverConfig = {
@@ -32,7 +31,7 @@ const handleRequest = function (request, response) {
 
 const httpsServer = https.createServer(serverConfig, handleRequest);
 	httpsServer.listen(HTTPS_PORT, '0.0.0.0');
-//   .listen(HTTPS_PORT, () => console.log(`Listening on ${HTTPS_PORT}`));
+	// httpsServer.listen(HTTPS_PORT, () => console.log(`Listening on ${HTTPS_PORT}`));
 
 
 // ----------------------------------------------------------------------------------------
