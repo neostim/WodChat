@@ -3,7 +3,7 @@ var localDisplayName;
 var localStream;
 var serverConnection;
 var peerConnections = {};
-var HOST = location.origin.replace(/^http/, 'wss');
+var HOST = location.origin.replace(/^http/, 'ws');
 // key is uuid, values are peer connection object and user defined display name string
 
 var peerConnectionConfig = {
