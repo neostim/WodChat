@@ -34,6 +34,11 @@ function start()
 		},
 		audio: true
 	};
+	
+	//20 second timer keepalive
+	setInterval(function() {
+    console.log('Sending keep-alive to server');
+}, 2000);
 
 	// set up local video stream
 	if (navigator.mediaDevices.getUserMedia) {
