@@ -1,8 +1,10 @@
-const PORT = process.env.PORT || 3000;
+// const HTTPS_PORT = process.env.PORT || 3000;
+const HTTPS_PORT = 8443; //default port for https is 443
+const HTTP_PORT = 8001; //default port for http is 80
 
 const fs = require('fs');
 const http = require('http');
-// const https = require('https');
+const https = require('https');
 const WebSocket = require('ws');
 const WebSocketServer = WebSocket.Server;
 
@@ -31,9 +33,10 @@ const handleRequest = function (request, response) {
 	}
 };
 
-const httpsServer = http.createServer(serverConfig, handleRequest);
-	// httpsServer.listen(PORT, '0.0.0.0');
-	httpsServer.listen(PORT, () => console.log(`Listening on ${PORT}`));
+const httpsServer = https.createServer(serverConfig, handleRequest);
+httpsServer.listen(HTTPS_PORT);
+	// httpsServer.listen(HTTPS_PORT, '0.0.0.0');
+	// httpsServer.listen(HTTPS_PORT, () => console.log(`Listening on ${HTTPS_PORT}`));
 
 
 // ----------------------------------------------------------------------------------------
@@ -56,9 +59,9 @@ wss.on('connection', function (ws) {
 
 wss.broadcast = function (data) {
 	this.clients.forEach(function (client) {
-		 console.log('Attempting to broadcasting from WSS, ready state is: ', client.readyState);
+		console.log('Attempting to broadcasting from WSS, ready state is: ', client.readyState);
 		if (client.readyState === WebSocket.OPEN) {
-			 console.log('Sending client data', data);
+			console.log('Sending client data', data);
 			client.send(data);
 		}
 	});
@@ -67,9 +70,10 @@ wss.broadcast = function (data) {
 // ----------------------------------------------------------------------------------------
 
 // Separate server to redirect from http to https
-
-//http.createServer(function (req, res) {
- //   console.log(req.headers['host']+req.url);
-  //  res.writeHead(301, { "Location": "https://" + req.headers['host'] + req.url });
-   // res.end();
-//}).listen(PORT);
+http.createServer(function (req, res) {
+	console.log(req.headers['host'] + req.url);
+	res.writeHead(301, {
+		"Location": "https://" + req.headers['host'] + req.url
+	});
+	res.end();
+}).listen(HTTP_PORT);

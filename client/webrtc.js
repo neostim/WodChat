@@ -1,9 +1,11 @@
+const WS_PORT = 8443; //make sure this matches the port for the webscokets server
+
 var localUuid;
 var localDisplayName;
 var localStream;
 var serverConnection;
 var peerConnections = {};
-var HOST = location.origin.replace(/^http/, 'ws');
+// var HOST = location.origin.replace(/^http/, 'ws');
 // key is uuid, values are peer connection object and user defined display name string
 
 var peerConnectionConfig = {
@@ -13,14 +15,12 @@ var peerConnectionConfig = {
 	]
 };
 
-// console.log('Peer config: ', peerConnectionConfig);
-
-function pageReady()
+function start()
 {
 	localUuid = createUUID();
 
   // check if "&displayName=xxx" is appended to URL, otherwise alert user to populate
-	var urlParams 		 = new URLSearchParams(window.location.search),
+	var urlParams 		 = new URLSearchParams(window.location.search);
 		localDisplayName = urlParams.get('displayName') || prompt('Enter your name', '');
 
 	// Update the name label
@@ -30,40 +30,41 @@ function pageReady()
 
 	var constraints = {
 		video: {
-			width: { max: 640 },
-			height: { max: 480 },
+			width: { max: 320 }, // was 640
+			height: { max: 240 }, // was 480
 			frameRate: { max: 30 },
 		},
-		audio: true,
+		audio: false, // this was true
 	};
 
 	// set up local video stream
 	if (navigator.mediaDevices.getUserMedia) {
 
-	navigator.mediaDevices
-		.getUserMedia(constraints)
-		.then(stream => {
+		navigator.mediaDevices
+			.getUserMedia(constraints)
+			.then(stream => {
 
-			localStream = stream;
-			document.getElementById('localVideo').srcObject = stream;
+				localStream = stream;
+				document.getElementById('localVideo').srcObject = stream;
 
-		})
-		.catch(errorHandler)
-		.then(() => {
+			})
+			.catch(errorHandler)
+			.then(() => {
 
-			serverConnection = new WebSocket(HOST); // 'wss://' + window.location.hostname
-			serverConnection.onmessage = gotMessageFromServer;
-			serverConnection.onopen = event => {
-				serverConnection.send(
-					JSON.stringify({
-						'displayName': localDisplayName,
-						'uuid': localUuid,
-						'dest': 'all'
-					})
-				);
-			}
+				// serverConnection = new WebSocket(HOST); // 'wss://' + window.location.hostname
+				serverConnection = new WebSocket('wss://' + window.location.hostname + ':' + WS_PORT);
+				serverConnection.onmessage = gotMessageFromServer;
+				serverConnection.onopen = event => {
+					serverConnection.send(
+						JSON.stringify({
+							'displayName': localDisplayName,
+							'uuid': localUuid,
+							'dest': 'all'
+						})
+					);
+				}
 
-		}).catch(errorHandler);
+			}).catch(errorHandler);
 
 	} else {
 		alert('Your browser does not support getUserMedia API');
@@ -84,7 +85,7 @@ function pageReady()
 
 function gotMessageFromServer(message)
 {
-	 console.log('Recived signal from server..');
+	console.log('Recived signal from server..');
 
 	var signal   	   = JSON.parse(message.data),
 		destination	   = signal.dest,
@@ -200,7 +201,7 @@ function gotIceCandidate(event, peerUuid)
 
 function createdDescription(description, peerUuid)
 {
-	 console.log(`got description, peer ${peerUuid}`);
+	console.log(`got description, peer ${peerUuid}`);
 
 	peerConnections[peerUuid]
 		.peerConnection
