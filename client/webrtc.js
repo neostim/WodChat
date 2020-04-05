@@ -32,7 +32,7 @@ function start()
 			height: { max: 480 }, // was 480
 			frameRate: { max: 30 },
 		},
-		audio: true, // this was true
+		audio: false
 	};
 
 	// set up local video stream
