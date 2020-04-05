@@ -70,10 +70,10 @@ wss.broadcast = function (data) {
 // ----------------------------------------------------------------------------------------
 
 // Separate server to redirect from http to https
-http.createServer(function (req, res) {
-	console.log(req.headers['host'] + req.url);
-	res.writeHead(301, {
-		"Location": "https://" + req.headers['host'] + req.url
-	});
-	res.end();
-}).listen(HTTP_PORT);
+// http.createServer(function (req, res) {
+// 	console.log(req.headers['host'] + req.url);
+// 	res.writeHead(301, {
+// 		"Location": "https://" + req.headers['host'] + req.url
+// 	});
+// 	res.end();
+// }).listen(HTTP_PORT);
