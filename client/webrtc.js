@@ -38,6 +38,11 @@ function start()
 	//20 second timer keepalive
 	setInterval(function() {
     console.log('Sending keep-alive to server');
+			serverConnection.send(
+			JSON.stringify({
+				'Keep-Alive'
+			})
+		);
 }, 2000);
 
 	// set up local video stream
