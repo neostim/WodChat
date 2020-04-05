@@ -73,7 +73,6 @@ function start()
 	}
 }
 
-
 // Log errors
 // serverConnection.onerror = function (error) {
 //	alert('WebSocket Error ' + error);
@@ -83,7 +82,6 @@ function start()
 // serverConnection.onmessage = function (e) {
 //	alert('Server: ' + e.data);
 // };
-
 
 function gotMessageFromServer(message)
 {
@@ -98,17 +96,6 @@ function gotMessageFromServer(message)
 	if (peerUuid == localUuid || (destination != localUuid && destination != 'all')) return;
 
 	if (displayName && destination == 'all') {
-
-		// set up peer connection object for a newcomer peer
-		// alert('Set up Peer Connection for newcomer');
-
-		console.log('MESSAGE TO ALL:', {
-			displayName: displayName,
-			uuids: {
-				peer: peerUuid,
-				local: localUuid
-			}
-		});
 
 		setUpPeer(peerUuid, displayName);
 
