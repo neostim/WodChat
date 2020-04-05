@@ -30,11 +30,11 @@ function start()
 
 	var constraints = {
 		video: {
-			width: { max: 320 }, // was 640
-			height: { max: 240 }, // was 480
+			width: { max: 640 }, // was 640
+			height: { max: 480 }, // was 480
 			frameRate: { max: 30 },
 		},
-		audio: false, // this was true
+		audio: true, // this was true
 	};
 
 	// set up local video stream
