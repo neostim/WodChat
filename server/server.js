@@ -19,6 +19,8 @@ const serverConfig = {
 if (HEROKU) {
 	const https = require('http');
 	const serverConfig = {};
+
+	console.log('We are sering on Heroku..');
 }
 // ----------------------------------------------------------------------------------------
 
