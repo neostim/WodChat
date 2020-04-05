@@ -1,7 +1,6 @@
-// const HTTPS_PORT = process.env.PORT || 3000;
-// const HTTPS_PORT = 443; // 8443; //default port for https is 443
-const HTTP_PORT  = 80; // 8001; //default port for http is 80
 const HTTPS_PORT = process.env.PORT || 3000;
+// const HTTPS_PORT = 8443; // 8443; //default port for https is 443
+const HTTP_PORT = 8001; // 8001; //default port for http is 80
 
 const fs = require('fs');
 const http = require('http');

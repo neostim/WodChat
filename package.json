@@ -21,6 +21,8 @@
   },
   "homepage": "https://github.com/shanet/WebRTC-Example#readme",
   "dependencies": {
-    "ws": "^3.3.2"
+    "bufferutil": "^4.0.1",
+    "utf-8-validate": "^5.0.2",
+    "ws": "^3.3.3"
   }
 }
