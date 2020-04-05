@@ -56,7 +56,7 @@ wss.on('connection', function (ws) {
 
 wss.broadcast = function (data) {
 	this.clients.forEach(function (client) {
-		 console.log('Broadcasting from WSS');
+		 console.log('Attempting to broadcasting from WSS, ready state is: ', client.readyState);
 		if (client.readyState === WebSocket.OPEN) {
 			 console.log('Sending client data', data);
 			client.send(data);
