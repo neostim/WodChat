@@ -5,23 +5,20 @@ const HTTP_PORT = 8001; // 8001; //default port for http is 80
 
 const fs = require('fs');
 const http = require('http');
-const https = require('https');
+const https = HEROKU ? require('http') : require('https');
 const WebSocket = require('ws');
 const WebSocketServer = WebSocket.Server;
 
-// Yes, TLS is required
-const serverConfig = {
+const serverConfig = HEROKU ? {} : {
 	key: fs.readFileSync('key.pem'), // 79244034_192.168.0.8.key'
 	cert: fs.readFileSync('cert.pem'), // 79244034_192.168.0.8.cert
 };
 
 // Things that need to be adjusted for Heroku but we still want to be able to easily test locally
 if (HEROKU) {
-	const https = require('http');
-	const serverConfig = {};
-
-	console.log('We are sering on Heroku..');
+	console.log('We are running on Heroku..');
 }
+
 // ----------------------------------------------------------------------------------------
 
 // Create a server for the client html page
