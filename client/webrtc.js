@@ -45,10 +45,7 @@ function start()
 				localStream = stream;
 
 				// Attach the video and mute the audio so we don't have feedback
-				const vid = document.getElementById('localVideo');
-				vid.autoplay = true;
-				vid.muted = true;
-				vid.srcObject = stream;
+				document.getElementById('localVideo').srcObject = stream;
 
 			})
 			.catch(errorHandler)
@@ -211,24 +208,27 @@ function gotRemoteStream(event, peerUuid)
 	console.log('> gotRemoteStream Called!');
 	console.log(`Got remote stream, peer ${peerUuid}`);
 
-	// assign stream to new HTML video element
-	var vidElement = document.createElement('video');
-		vidElement.setAttribute('autoplay', '');
-		vidElement.setAttribute('muted', '');
-		vidElement.srcObject = event.streams[0];
+	if (! document.getElementById("remoteVideo_" + peerUuid)) {
+		// assign stream to new HTML video element
+		var vidElement = document.createElement('video');
+			vidElement.setAttribute('autoplay', '');
+			vidElement.setAttribute('muted', '');
+			vidElement.srcObject = event.streams[0];
 
-	var vidContainer = document.createElement('div');
-		vidContainer.setAttribute('id', 'remoteVideo_' + peerUuid);
-		vidContainer.setAttribute('class', 'videoContainer');
-		vidContainer.appendChild(vidElement);
-		vidContainer.appendChild(
-			makeLabel(peerConnections[peerUuid].displayName)
-		);
+		var vidContainer = document.createElement('div');
+			vidContainer.setAttribute('id', 'remoteVideo_' + peerUuid);
+			vidContainer.setAttribute('class', 'videoContainer');
+			vidContainer.appendChild(vidElement);
+			vidContainer.appendChild(
+				makeLabel(peerConnections[peerUuid].displayName)
+			);
 
-	document.getElementById('videos')
-			.appendChild(vidContainer);
+		document.getElementById('videos')
+				.appendChild(vidContainer);
 
-	updateLayout();
+		updateLayout();
+	}
+
 }
 
 function checkPeerDisconnect(event, peerUuid)
