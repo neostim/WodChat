@@ -212,7 +212,8 @@ function gotRemoteStream(event, peerUuid)
 		// assign stream to new HTML video element
 		var vidElement = document.createElement('video');
 			vidElement.setAttribute('autoplay', '');
-			vidElement.setAttribute('muted', '');
+		        vidElement.setAttribute('playsinline', '');
+			//vidElement.setAttribute('muted', '');
 			vidElement.srcObject = event.streams[0];
 
 		var vidContainer = document.createElement('div');
