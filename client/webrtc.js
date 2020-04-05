@@ -13,7 +13,7 @@ var peerConnectionConfig = {
 	]
 };
 
-console.log('Peer config: ', peerConnectionConfig);
+// console.log('Peer config: ', peerConnectionConfig);
 
 function pageReady()
 {
@@ -84,24 +84,30 @@ function pageReady()
 
 function gotMessageFromServer(message)
 {
-	console.log('> gotMessageFromServer was called');
-	var signal   = JSON.parse(message.data),
-		peerUuid = signal.uuid;
+	// console.log('Recived signal from server..');
+
+	var signal   	   = JSON.parse(message.data),
+		destination	   = signal.dest,
+		displayName	   = signal.displayName,
+		peerUuid 	   = signal.uuid;
 
 	// Ignore messages that are not for us or from ourselves
-	if (peerUuid == localUuid || (signal.dest != localUuid && signal.dest != 'all')) return;
+	if (peerUuid == localUuid || (destination != localUuid && destination != 'all')) return;
 
-	if (signal.displayName && signal.dest == 'all') {
+	if (displayName && destination == 'all') {
 
-		console.log('Message for ALL');
 		// set up peer connection object for a newcomer peer
+		// alert('Set up Peer Connection for newcomer');
 
-		alert('Set up Peer Connection for newcomer');
-		console.log('uuid:',peerUuid);
-		console.log('name:',signal.displayName);
-		console.log('created audio only stream, original stream tracks: ', signal.displayName);
+		console.log('MESSAGE TO ALL:', {
+			displayName: displayName,
+			uuids: {
+				peer: peerUuid,
+				local: localUuid
+			}
+		});
 
-		setUpPeer(peerUuid, signal.displayName);
+		setUpPeer(peerUuid, displayName);
 
 		serverConnection.send(
 			JSON.stringify({
@@ -112,26 +118,26 @@ function gotMessageFromServer(message)
 		);
 
 
-	} else if (signal.displayName && signal.dest == localUuid) {
+	} else if (displayName && destination == localUuid) {
 
 		// initiate call if we are the newcomer peer
 		// alert('initiate call');
 		console.log('Initiate Call');
 
-		setUpPeer(peerUuid, signal.displayName, true);
+		setUpPeer(peerUuid, displayName, true);
 
 	} else if (signal.sdp) {
 
-		peerConnections[peerUuid].pc
+		peerConnections[peerUuid].peerConnection
 			.setRemoteDescription(new RTCSessionDescription(signal.sdp))
 			.then(function () {
 
-				alert('answer to offer');
+				// alert('answer to offer');
 				console.log('answer to offer');
 
 				// Only create answers in response to offers
 				if (signal.sdp.type == 'offer') {
-					peerConnections[peerUuid].pc
+					peerConnections[peerUuid].peerConnection
 						.createAnswer()
 						.then(description => createdDescription(description, peerUuid))
 						.catch(errorHandler);
@@ -144,8 +150,10 @@ function gotMessageFromServer(message)
 
 		console.log('WTF something went wrong');
 
-		peerConnections[peerUuid].pc
-			.addIceCandidate(new RTCIceCandidate(signal.ice))
+		peerConnections[peerUuid].peerConnection
+			.addIceCandidate(
+				new RTCIceCandidate(signal.ice)
+			)
 			.catch(errorHandler);
 
 	}
@@ -153,22 +161,26 @@ function gotMessageFromServer(message)
 
 function setUpPeer(peerUuid, displayName, initCall = false)
 {
-	console.log(`Peer Connection UUID: {$peerUuid}`);
-
 	peerConnections[peerUuid] = {
-		'displayName': displayName,
-		'pc': new RTCPeerConnection(peerConnectionConfig)
+		'displayName':    displayName,
+		'peerConnection': new RTCPeerConnection(peerConnectionConfig)
 	};
 
-	peerConnections[peerUuid].pc.onicecandidate = event => gotIceCandidate(event, peerUuid);
-	peerConnections[peerUuid].pc.ontrack = event => gotRemoteStream(event, peerUuid);
-	peerConnections[peerUuid].pc.oniceconnectionstatechange = event => checkPeerDisconnect(event, peerUuid);
-	peerConnections[peerUuid].pc.addStream(localStream);
+	// Access it easily
+	peerConnection = peerConnections[peerUuid].peerConnection;
+
+	// Add our streams
+	peerConnection.onicecandidate 			   = event => gotIceCandidate(event, peerUuid);
+	peerConnection.ontrack 					   = event => gotRemoteStream(event, peerUuid); // onaddstream is deprecated
+	peerConnection.oniceconnectionstatechange  = event => checkPeerDisconnect(event, peerUuid);
+	peerConnection.addStream(localStream);
 
 	if (initCall) {
-		peerConnections[peerUuid].pc
+		peerConnection
 			.createOffer()
-			.then(description => createdDescription(description, peerUuid))
+			.then(
+				description => createdDescription(description, peerUuid)
+			)
 			.catch(errorHandler);
 	}
 }
@@ -189,22 +201,25 @@ function gotIceCandidate(event, peerUuid)
 function createdDescription(description, peerUuid)
 {
 	// console.log(`got description, peer ${peerUuid}`);
-	peerConnections[peerUuid].pc
+
+	peerConnections[peerUuid]
+		.peerConnection
 		.setLocalDescription(description)
 		.then(function () {
 			serverConnection.send(
 				JSON.stringify({
-					'sdp': peerConnections[peerUuid].pc.localDescription,
+					'sdp':  peerConnections[peerUuid].peerConnection.localDescription,
 					'uuid': localUuid,
 					'dest': peerUuid
 				})
 			);
 			})
 			.catch(errorHandler);
-		}
+}
 
 function gotRemoteStream(event, peerUuid)
 {
+	console.log('> gotRemoteStream Called!');
 	console.log(`Got remote stream, peer ${peerUuid}`);
 
 	// assign stream to new HTML video element
@@ -229,9 +244,11 @@ function gotRemoteStream(event, peerUuid)
 
 function checkPeerDisconnect(event, peerUuid)
 {
-	var state = peerConnections[peerUuid].pc.iceConnectionState;
+	var state = peerConnections[peerUuid]
+					.peerConnection
+					.iceConnectionState;
 
-	console.log(`connection with peer ${peerUuid} ${state}`);
+	console.log(`Connection with peer ${peerUuid} ${state}`);
 
 	if (state === "failed" || state === "closed" || state === "disconnected") {
 		delete peerConnections[peerUuid];
@@ -279,7 +296,8 @@ function makeLabel(label)
 
 function errorHandler(error)
 {
-	console.log(error);
+	console.error('ERRORHANDLER: ');
+	console.error(error);
 }
 
 // Taken from http://stackoverflow.com/a/105074/515584
