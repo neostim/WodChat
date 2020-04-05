@@ -3,8 +3,8 @@ const HTTPS_PORT = process.env.PORT || 3000;
 const HTTP_PORT = 8001; // 8001; //default port for http is 80
 
 const fs = require('fs');
-const http = require('http');
-const https = require('https');
+const https = require('http');
+// const https = require('https');
 const WebSocket = require('ws');
 const WebSocketServer = WebSocket.Server;
 
@@ -34,9 +34,9 @@ const handleRequest = function (request, response) {
 };
 
 const httpsServer = https.createServer(serverConfig, handleRequest);
-httpsServer.listen(HTTPS_PORT);
+	// httpsServer.listen(HTTPS_PORT);
 	// httpsServer.listen(HTTPS_PORT, '0.0.0.0');
-	// httpsServer.listen(HTTPS_PORT, () => console.log(`Listening on ${HTTPS_PORT}`));
+	httpsServer.listen(HTTPS_PORT, () => console.log(`Listening on ${HTTPS_PORT}`));
 
 
 // ----------------------------------------------------------------------------------------
