@@ -45,7 +45,11 @@ function start()
 			.then(stream => {
 
 				localStream = stream;
-				document.getElementById('localVideo').srcObject = stream;
+
+				const vid = document.getElementById('localVideo');
+				vid.autoplay = true;
+				vid.muted = true;
+				vid.srcObject = stream;
 
 			})
 			.catch(errorHandler)
