@@ -5,7 +5,7 @@ var localDisplayName;
 var localStream;
 var serverConnection;
 var peerConnections = {};
-// var HOST = location.origin.replace(/^http/, 'ws');
+var HOST = location.origin.replace(/^http/, 'ws');
 // key is uuid, values are peer connection object and user defined display name string
 
 var peerConnectionConfig = {
@@ -51,8 +51,8 @@ function start()
 			.catch(errorHandler)
 			.then(() => {
 
-				// serverConnection = new WebSocket(HOST); // 'wss://' + window.location.hostname
-				serverConnection = new WebSocket('wss://' + window.location.hostname + ':' + WS_PORT);
+				serverConnection = new WebSocket(HOST); // 'wss://' + window.location.hostname
+				// serverConnection = new WebSocket('wss://' + window.location.hostname + ':' + WS_PORT);
 				serverConnection.onmessage = gotMessageFromServer;
 				serverConnection.onopen = event => {
 					serverConnection.send(
