@@ -1,7 +1,7 @@
 const HEROKU = (typeof process.env.PORT !== "undefined");
 
 const HTTPS_PORT = process.env.PORT || 8443;
-const HTTP_PORT = 8001; // 8001; //default port for http is 80
+const HTTP_PORT = 8001; //default port for http is 80
 
 const fs = require('fs');
 const http = require('http');
