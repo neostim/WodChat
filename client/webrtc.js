@@ -1,5 +1,3 @@
-const WS_PORT = 443; //make sure this matches the port for the webscokets server
-
 var localUuid;
 var localDisplayName;
 var localStream;
@@ -46,6 +44,7 @@ function start()
 
 				localStream = stream;
 
+				// Attach the video and mute the audio so we don't have feedback
 				const vid = document.getElementById('localVideo');
 				vid.autoplay = true;
 				vid.muted = true;
@@ -55,8 +54,7 @@ function start()
 			.catch(errorHandler)
 			.then(() => {
 
-				serverConnection = new WebSocket(HOST); // 'wss://' + window.location.hostname
-				// serverConnection = new WebSocket('wss://' + window.location.hostname + ':' + WS_PORT);
+				serverConnection = new WebSocket(HOST);
 				serverConnection.onmessage = gotMessageFromServer;
 				serverConnection.onopen = event => {
 					serverConnection.send(
@@ -176,7 +174,7 @@ function setUpPeer(peerUuid, displayName, initCall = false)
 
 	// Add our streams
 	peerConnection.onicecandidate 			   = event => gotIceCandidate(event, peerUuid);
-	peerConnection.ontrack 					   = event => gotRemoteStream(event, peerUuid); // onaddstream is deprecated
+	peerConnection.onaddstream 				   = event => gotRemoteStream(event, peerUuid); // onaddstream is deprecated
 	peerConnection.oniceconnectionstatechange  = event => checkPeerDisconnect(event, peerUuid);
 	peerConnection.addStream(localStream);
 

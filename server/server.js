@@ -1,18 +1,25 @@
-const HTTPS_PORT = process.env.PORT || 3000;
-// const HTTPS_PORT = 8443; // 8443; //default port for https is 443
+const HEROKU = (typeof process.env.PORT !== "undefined");
+
+const HTTPS_PORT = process.env.PORT || 8443;
 const HTTP_PORT = 8001; // 8001; //default port for http is 80
 
 const fs = require('fs');
-const https = require('http');
-// const https = require('https');
+const http = require('http');
+const https = require('https');
 const WebSocket = require('ws');
 const WebSocketServer = WebSocket.Server;
 
 // Yes, TLS is required
 const serverConfig = {
-//   key:  fs.readFileSync('key.pem'),  // 79244034_192.168.0.8.key'
-//   cert: fs.readFileSync('cert.pem'), // 79244034_192.168.0.8.cert
+	key: fs.readFileSync('key.pem'), // 79244034_192.168.0.8.key'
+	cert: fs.readFileSync('cert.pem'), // 79244034_192.168.0.8.cert
 };
+
+// Things that need to be adjusted for Heroku but we still want to be able to easily test locally
+if (HEROKU) {
+	const https = require('http');
+	const serverConfig = {};
+}
 // ----------------------------------------------------------------------------------------
 
 // Create a server for the client html page
@@ -34,10 +41,7 @@ const handleRequest = function (request, response) {
 };
 
 const httpsServer = https.createServer(serverConfig, handleRequest);
-	// httpsServer.listen(HTTPS_PORT);
-	// httpsServer.listen(HTTPS_PORT, '0.0.0.0');
 	httpsServer.listen(HTTPS_PORT, () => console.log(`Listening on ${HTTPS_PORT}`));
-
 
 // ----------------------------------------------------------------------------------------
 
@@ -50,7 +54,7 @@ wss.on('connection', function (ws) {
 	console.log('Client connected');
 	ws.on('message', function (message) {
 		// Broadcast any received message to all clients
-		console.log('received: %s', message);
+		// console.log('received: %s', message);
 		wss.broadcast(message);
 	});
 
