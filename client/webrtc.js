@@ -120,7 +120,6 @@ function gotMessageFromServer(message)
 			})
 		);
 
-
 	} else if (displayName && destination == localUuid) {
 
 		// initiate call if we are the newcomer peer
@@ -174,7 +173,7 @@ function setUpPeer(peerUuid, displayName, initCall = false)
 
 	// Add our streams
 	peerConnection.onicecandidate 			   = event => gotIceCandidate(event, peerUuid);
-	peerConnection.onaddstream 				   = event => gotRemoteStream(event, peerUuid); // onaddstream is deprecated
+	peerConnection.ontrack 					   = event => gotRemoteStream(event, peerUuid); // onaddstream is deprecated
 	peerConnection.oniceconnectionstatechange  = event => checkPeerDisconnect(event, peerUuid);
 	peerConnection.addStream(localStream);
 
