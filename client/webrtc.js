@@ -84,7 +84,7 @@ function pageReady()
 
 function gotMessageFromServer(message)
 {
-	// console.log('Recived signal from server..');
+	 console.log('Recived signal from server..');
 
 	var signal   	   = JSON.parse(message.data),
 		destination	   = signal.dest,
@@ -200,7 +200,7 @@ function gotIceCandidate(event, peerUuid)
 
 function createdDescription(description, peerUuid)
 {
-	// console.log(`got description, peer ${peerUuid}`);
+	 console.log(`got description, peer ${peerUuid}`);
 
 	peerConnections[peerUuid]
 		.peerConnection
