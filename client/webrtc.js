@@ -35,15 +35,15 @@ function start()
 		audio: true
 	};
 	
-	//20 second timer keepalive
+	//29 second timer keepalive so Heroku doesn't time us out
 	setInterval(function() {
-    console.log('Sending keep-alive to server');
+        console.log('Sending keep-alive to server');
 			serverConnection.send(
 			JSON.stringify({
-							'dest': 'all'
+			'Keep': 'Alive'
 			})
 		);
-}, 2000);
+}, 29000);
 
 	// set up local video stream
 	if (navigator.mediaDevices.getUserMedia) {
