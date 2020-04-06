@@ -40,7 +40,7 @@ function start()
     console.log('Sending keep-alive to server');
 			serverConnection.send(
 			JSON.stringify({
-				'Keep-Alive'
+							'dest': 'all'
 			})
 		);
 }, 2000);
