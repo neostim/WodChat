@@ -6,6 +6,9 @@ var peerConnections = {};
 var HOST = location.origin.replace(/^http/, 'ws');
 // key is uuid, values are peer connection object and user defined display name string
 
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.9.0/feather.min.js"></script>
+
 var peerConnectionConfig = {
 	'iceServers': [
 		{'urls': 'stun:stun.stunprotocol.org:3478'},
