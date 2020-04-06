@@ -3,7 +3,6 @@
 <head>
 	<link rel="icon" href="data:,">
 	<script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
-	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.9.0/feather.min.js"></script>
 	<script src="webrtc.js"></script>
 	<style type="text/css">
 		:root{--rowHeight:98vh;--colWidth:98vw}body{background:#000}.videos{display:grid;grid-gap:5px;grid-auto-flow:row;grid-template-columns:repeat(auto-fit,minmax(var(--colWidth),1fr))}.videoContainer{position:relative;overflow:hidden;min-height:var(--rowHeight);min-width:var(--colWidth)}.videoContainer
@@ -14,26 +13,6 @@
 <body>
 	<div id="videos" class="videos">
 		<div id="localVideoContainer" class="videoContainer">
-	
-			
-			
-<canvas class="d-none"></canvas>
-
-    <div class="video-options">
-        <select name="" id="" class="custom-select">
-            <option value="">Select camera</option>
-        </select>
-    </div>
-
-    <img class="screenshot-image d-none" alt="">
-
-    <div class="controls">
-        <button class="btn btn-danger play" title="Play"><i data-feather="play-circle"></i></button>
-        <button class="btn btn-info pause d-none" title="Pause"><i data-feather="pause"></i></button>
-        <button class="btn btn-outline-success screenshot d-none" title="ScreenShot"><i data-feather="image"></i></button>
-    </div>
-			
-			
 			<video id="localVideo" autoplay muted playsinline></video>
 		</div>
 		<!--<button onclick="enableMute()" type="button">Mute sound</button>-->
