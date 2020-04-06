@@ -16,6 +16,7 @@ const screenshotImage = document.querySelector('img');
 const buttons = [...controls.querySelectorAll('button')];
 let streamStarted = false;
 
+const [play, pause, screenshot] = buttons;
 
 var peerConnectionConfig = {
 	'iceServers': [
