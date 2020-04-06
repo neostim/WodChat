@@ -92,6 +92,7 @@ function start()
 function enableMute()
 {
  localStream.getAudioTracks()[0].enabled = !(localStream.getAudioTracks()[0].enabled);
+	makeLabel(' - Muted');
 }
 
 function gotMessageFromServer(message)
