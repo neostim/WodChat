@@ -6,7 +6,15 @@ var peerConnections = {};
 var HOST = location.origin.replace(/^http/, 'ws');
 // key is uuid, values are peer connection object and user defined display name string
 
+feather.replace();
 
+const controls = document.querySelector('.controls');
+const cameraOptions = document.querySelector('.video-options>select');
+const video = document.querySelector('video');
+const canvas = document.querySelector('canvas');
+const screenshotImage = document.querySelector('img');
+const buttons = [...controls.querySelectorAll('button')];
+let streamStarted = false;
 
 
 var peerConnectionConfig = {
