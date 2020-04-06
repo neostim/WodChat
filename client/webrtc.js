@@ -89,6 +89,10 @@ function start()
 // serverConnection.onmessage = function (e) {
 //	alert('Server: ' + e.data);
 // };
+function enableMute()
+{
+ localStream.getAudioTracks()[0].enabled = !(localStream.getAudioTracks()[0].enabled);
+}
 
 function gotMessageFromServer(message)
 {
